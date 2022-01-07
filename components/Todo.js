@@ -6,16 +6,25 @@ import { db } from "../firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 import { useContext } from "react";
 import { TodoContext } from "../pages/TodoContext";
+import {useRouter} from 'next/router';
 
 const Todo = ({id, timestamp, title, detail}) => {
 
   const {showAlert, setTodo} = useContext(TodoContext)
+  const router = useRouter();
 
   const deleteTodo = async (id, e) => {
       e.stopPropagation();
+      // stopPropagation은 부모태그로의 이벤트 전파를 stop 중지하라는 의미입니다.
       const docRef = doc(db, 'todos', id);
       await deleteDoc(docRef)
       showAlert('error',`Todo with id ${id} deleted successfully`)
+  }
+
+  const seeMore = (id, e) => {
+    e.stopPropagation();      
+    // stopPropagation은 부모태그로의 이벤트 전파를 stop 중지하라는 의미입니다.
+    router.push(`/todos/${id}`)
   }
 
   return (
@@ -27,7 +36,7 @@ const Todo = ({id, timestamp, title, detail}) => {
           <IconButton onClick={e => deleteTodo(id,e)}>
             <DeleteIcon />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={e =>seeMore(id, e)}>
             <MoreVertIcon />
           </IconButton>
         </>
