@@ -1,11 +1,13 @@
 import { Button, TextField } from "@mui/material"
 import { addDoc, collection, serverTimestamp, updateDoc, doc } from "firebase/firestore"
 import { useContext, useEffect, useRef, useState } from "react"
+import { useAuth } from "../Auth"
 import { db } from "../firebase"
 import { TodoContext } from "../pages/TodoContext"
 
 const TodoForm = () => {
   const inputAreaRef = useRef();
+  const {currentUser} = useAuth();
   const {showAlert, todo, setTodo} = useContext(TodoContext)
 
   const onSubmit = async () => {
@@ -24,7 +26,7 @@ const TodoForm = () => {
       showAlert('info', `Todo with id ${todo.id} updated successfully`)
     } else {
       const collectionRef = collection(db, 'todos')
-      const docRef = await addDoc(collectionRef, {...todo, timestamp:serverTimestamp()})
+      const docRef = await addDoc(collectionRef, {...todo, email: currentUser.email, timestamp:serverTimestamp()})
       // addDoc를 이용하여 firebase CloudStore에서 자동으로 ID를 생성함
       // 생성된 ID로 새 문서를 추가한다.
       // ...todo는 입력 받은 값이고 그 값과
@@ -62,7 +64,7 @@ const TodoForm = () => {
   return (
     <div ref={inputAreaRef}>
       {/* <pre>{JSON.stringify(todo.title)}</pre> */}
-      <pre>{JSON.stringify(todo, null,'\t')}</pre>
+      {/* <pre>{JSON.stringify(todo, null,'\t')}</pre> */}
       <TextField 
         fullWidth 
         label="title" 
