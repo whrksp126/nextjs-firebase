@@ -1,4 +1,4 @@
-import { IconButton, ListItem, ListItemText } from "@mui/material"
+import { IconButton, ListItem, ListItemText, Tooltip } from "@mui/material"
 import moment from "moment"
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -18,7 +18,7 @@ const Todo = ({id, timestamp, title, detail}) => {
       // stopPropagation은 부모태그로의 이벤트 전파를 stop 중지하라는 의미입니다.
       const docRef = doc(db, 'todos', id);
       await deleteDoc(docRef)
-      showAlert('error',`Todo with id ${id} deleted successfully`)
+      showAlert('error',`할 일 "${title}" 가 삭제되었습니다.`)
   }
 
   const seeMore = (id, e) => {
@@ -33,18 +33,22 @@ const Todo = ({id, timestamp, title, detail}) => {
       style={{backgroundColor: '#FAFAFA'}}
       secondaryAction={
         <>
-          <IconButton onClick={e => deleteTodo(id,e)}>
-            <DeleteIcon />
-          </IconButton>
-          <IconButton onClick={e =>seeMore(id, e)}>
-            <MoreVertIcon />
-          </IconButton>
+          <Tooltip title="삭제" >
+            <IconButton onClick={e => deleteTodo(id,e)}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="상세">
+            <IconButton onClick={e =>seeMore(id, e)}>
+              <MoreVertIcon />
+            </IconButton>
+          </Tooltip>
         </>
       }
     >
       <ListItemText 
         primary={title}
-        secondary={moment(timestamp).format('MMMM do, yyyy')}
+        secondary={moment(timestamp).format('YY년 MM월 DD일, A h시 m분')}
       />
     </ListItem>
   )

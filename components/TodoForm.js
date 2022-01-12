@@ -11,30 +11,34 @@ const TodoForm = () => {
   const {showAlert, todo, setTodo} = useContext(TodoContext)
 
   const onSubmit = async () => {
-    if(todo?.hasOwnProperty('timestamp')){
-      // hasOwnProperty는 객체가 특정 프로퍼티를 가지고 있는지를 나타내는 불리언 값을 반환한다.
-      // todo에 timestamp라는 프로퍼티를 가지고 있는가?
-
-      // update the todo
-      const docRef = doc(db, 'todos', todo.id);
-      const todoUpdated = { ...todo, timestamp: serverTimestamp()}
-      // update the todo 서버의 값으로 타임스탬프 필드를 업데이트합니다.
-      // 문서의 필드를 서버가 업데이트를 수신하는 시기를 추적하는 서버 타임스탬프로 설정할 수 있습니다.
-      updateDoc(docRef, todoUpdated)
-      // 전체 문서를 덮어쓰지 않고 문서의 일부 필드를 업데이트하려면 update() 메서드를 사요합니다.
-      setTodo({title: '', detail: ''});
-      showAlert('info', `Todo with id ${todo.id} updated successfully`)
+    if(!todo.title) {
+      showAlert('error','제목은 필수 입력 사항입니다.')
     } else {
-      const collectionRef = collection(db, 'todos')
-      const docRef = await addDoc(collectionRef, {...todo, email: currentUser.email, timestamp:serverTimestamp()})
-      // addDoc를 이용하여 firebase CloudStore에서 자동으로 ID를 생성함
-      // 생성된 ID로 새 문서를 추가한다.
-      // ...todo는 입력 받은 값이고 그 값과
-      // 서버의 값으로 타임스탬프 필드 업데이트 합니다.
-      setTodo({title: '', detail: ''})
-      showAlert('success',`Todo with id ${docRef.title} is added successfully`)
-
+      if(todo?.hasOwnProperty('timestamp')){
+        // hasOwnProperty는 객체가 특정 프로퍼티를 가지고 있는지를 나타내는 불리언 값을 반환한다.
+        // todo에 timestamp라는 프로퍼티를 가지고 있는가?
+  
+        // update the todo
+        const docRef = doc(db, 'todos', todo.id);
+        const todoUpdated = { ...todo, timestamp: serverTimestamp()}
+        // update the todo 서버의 값으로 타임스탬프 필드를 업데이트합니다.
+        // 문서의 필드를 서버가 업데이트를 수신하는 시기를 추적하는 서버 타임스탬프로 설정할 수 있습니다.
+        updateDoc(docRef, todoUpdated)
+        // 전체 문서를 덮어쓰지 않고 문서의 일부 필드를 업데이트하려면 update() 메서드를 사요합니다.
+        setTodo({title: '', detail: ''});
+        showAlert('info', `할 일 "${todo.title}" 가 업데이트되었습니다.`)
+      } else {
+        const collectionRef = collection(db, 'todos')
+        const docRef = await addDoc(collectionRef, {...todo, email: currentUser.email, timestamp:serverTimestamp()})
+        // addDoc를 이용하여 firebase CloudStore에서 자동으로 ID를 생성함
+        // 생성된 ID로 새 문서를 추가한다.
+        // ...todo는 입력 받은 값이고 그 값과
+        // 서버의 값으로 타임스탬프 필드 업데이트 합니다.
+        setTodo({title: '', detail: ''})
+        showAlert('success',`할 일 "${todo.title}" 가 추가되었습니다.`)
+      }
     }
+    
   }
 
   useEffect(() => {
@@ -67,7 +71,7 @@ const TodoForm = () => {
       {/* <pre>{JSON.stringify(todo, null,'\t')}</pre> */}
       <TextField 
         fullWidth 
-        label="title" 
+        label="제목" 
         margin="normal" 
         value={todo.title} 
         onChange={
@@ -76,7 +80,7 @@ const TodoForm = () => {
       />
       <TextField 
         fullWidth 
-        label="detail" 
+        label="세부 사항" 
         multiline 
         maxRows={4} 
         value={todo.detail} 
@@ -84,8 +88,8 @@ const TodoForm = () => {
           e => setTodo({...todo, detail: e.target.value})
         } 
       />
-      <Button onClick={onSubmit} variant="contained" sx={{mt:3}}>
-        {todo.hasOwnProperty('timestamp') ? "Update todo" : "Add a new todo"}
+      <Button onClick={onSubmit} variant="contained" sx={{mt:3}} color={todo.hasOwnProperty('timestamp')? "secondary" : "primary" } >
+        {todo.hasOwnProperty('timestamp') ? "할 일 업데이트" : "새 할 일 추가"}
       </Button>
     </div>
   )

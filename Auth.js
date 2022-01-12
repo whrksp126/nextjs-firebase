@@ -18,10 +18,10 @@ export const AuthProvider = ({ children }) => {
       // 로그인, 로그아웃 및 토큰 새로 고침 이벤트를 포함하여 로그인한
       // 사용자의 ID 토큰에 대한 변경 사항을 관찰하는 사람을 추가합니다.
       if(!user){
-        console.log('no user')
+        console.log('사용자 없음')
         setCurrentUser(null);
         setLoading(false)
-        // nookies.set(undefined, token, {});
+        // nookies.set(undefined, '', token, {});
         console.log(token)
         return;
       }
@@ -31,8 +31,8 @@ export const AuthProvider = ({ children }) => {
       setCurrentUser(user);
       setLoading(false);
       nookies.set(undefined,'token',token,{})
-      console.log('token',token)
-      console.log('user',user)
+      console.log('토큰',token)
+      console.log('사용자',user)
     })
   }, [])
   if(loading) {

@@ -29,11 +29,10 @@ const Detail = ({todoProps}) => {
           </CardContent>
           <CardActions>
             <Link href="/" passHref>
-              <Button size="small">Back to home</Button>
+              <Button size="small">홈으로</Button>
             </Link>
           </CardActions>
         </Card>
-
       </Grid> 
     </Grid>
   )

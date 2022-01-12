@@ -1,4 +1,4 @@
-import { Alert, Avatar, Container, IconButton, Snackbar, Typography } from '@mui/material'
+import { Alert, Avatar, Container, IconButton, Snackbar, Tooltip, Typography } from '@mui/material'
 import { useState } from 'react';
 import TodoForm from '../components/TodoForm'
 import TodoList from '../components/TodoList'
@@ -36,11 +36,13 @@ export default function Home({todosProps}) {
     <TodoContext.Provider value={{showAlert, todo, setTodo}}>
       <Container maxWidth="sm">
         <Box sx={{ display:'flex', justifyContent: 'space-between'}} mt={3}>
-          <IconButton onClick={()=> auth.signOut()}> 
-            <Avatar src={currentUser.photoURL} />
-          </IconButton>
+          <Tooltip title="로그아웃"  placement="right-end" >
+            <IconButton onClick={()=> auth.signOut()}> 
+              <Avatar src={currentUser.photoURL} />
+            </IconButton>
+          </Tooltip>
           <Typography variant="h5">
-            {currentUser.displayName}
+            {currentUser.displayName}의 차량 관리 일기장
           </Typography>
         </Box>
         <TodoForm />
