@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { Button, Grid, TextField } from "@mui/material"
 import { useRouter } from "next/router";
 import { useAuth } from '../../Auth'
+import {getAuth, updateProfile} from 'firebase/auth';
 
 const SingupPage = (props) => {
 
@@ -12,10 +13,13 @@ const SingupPage = (props) => {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPassworrdError] = useState(false);
 
-
+  // 회원가입 용
   const {signUp} = useAuth()
   const router = useRouter();
   const [error, setError] = useState("");
+
+  // 프로필 업데이트 용(displayName 추가)
+  const auth = getAuth();
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -31,6 +35,13 @@ const SingupPage = (props) => {
       console.log('다 입력했음')
       try {
         await signUp(email, password);
+        updateProfile(auth.currentUser, {
+          displayName: name
+        }).then(() => {
+          console.log("프로필이 업데이트되었습니다!")
+        }).catch((error) => {
+          console.log('오류가 발생하였습니다')
+        });
         router.push('/');
         console.log('회원가입 완료')
       } catch (err) {

@@ -1,9 +1,11 @@
-import { Button, TextField } from "@mui/material"
+import { Button, TextField, Box, IconButton } from "@mui/material"
 import { addDoc, collection, serverTimestamp, updateDoc, doc } from "firebase/firestore"
 import { useContext, useEffect, useRef, useState } from "react"
 import { useAuth } from "../Auth"
 import { db } from "../firebase"
 import { TodoContext } from "../pages/TodoContext"
+
+import CarInfo from "./CarInfo"
 
 const TodoForm = () => {
   const inputAreaRef = useRef();
@@ -41,34 +43,37 @@ const TodoForm = () => {
     
   }
 
-  useEffect(() => {
-    const checkIfClickedOutside = e => {
-      if(!inputAreaRef.current.contains(e.target)){
-        // inputAreaRef는 useRef를 실행한 값으로 current: value로 저장된다.
-        // e.target은 addEventListener을 이용하여 받은 영역 값으로 
-        // 클릭한 부분의 태그 값을 가르킨다.
-        // inputAreaRef.current 는 ref={inputAreaRef}가 설정되어 있는 영역을 뜻 한다.    
-        console.log('외부 입력 영역');
-        // contains 메소드는 주어진 인자가 node의 자손인지, 아닌지에 대한 boolean 값을 리턴한다.
-        // e.target이 inputAreaRef의 자손인지를 확이하여 true, false 값을 반환한다.
-        setTodo({ title: '', detail: '' })
-      } else {
-        console.log('내부 입력 영역')
-      }
-    }
-      document.addEventListener('mousedown', checkIfClickedOutside)
-      // addEventListener를 이용하여 document에서 mouseDown이벤트가 일어날 때 그 값을
-      // checkIfClickedOutside에 담아준다.
-      return () => {
-        document.removeEventListener('mousedown', checkIfClickedOutside)
-        // removeEventListener를 이용하여 addEventListener로 등록했던 이벤트 리스너를 제거합니다.
-      }
-  }, [])
+  // useEffect(() => {
+  //   const checkIfClickedOutside = e => {
+  //     if(!inputAreaRef.current.contains(e.target)){
+  //       // inputAreaRef는 useRef를 실행한 값으로 current: value로 저장된다.
+  //       // e.target은 addEventListener을 이용하여 받은 영역 값으로 
+  //       // 클릭한 부분의 태그 값을 가르킨다.
+  //       // inputAreaRef.current 는 ref={inputAreaRef}가 설정되어 있는 영역을 뜻 한다.    
+  //       console.log('외부 입력 영역');
+  //       // contains 메소드는 주어진 인자가 node의 자손인지, 아닌지에 대한 boolean 값을 리턴한다.
+  //       // e.target이 inputAreaRef의 자손인지를 확이하여 true, false 값을 반환한다.
+  //       setTodo({ title: '', detail: '' })
+  //     } else {
+  //       console.log('내부 입력 영역')
+  //     }
+  //   }
+  //     document.addEventListener('mousedown', checkIfClickedOutside)
+  //     // addEventListener를 이용하여 document에서 mouseDown이벤트가 일어날 때 그 값을
+  //     // checkIfClickedOutside에 담아준다.
+  //     return () => {
+  //       document.removeEventListener('mousedown', checkIfClickedOutside)
+  //       // removeEventListener를 이용하여 addEventListener로 등록했던 이벤트 리스너를 제거합니다.
+  //     }
+  // }, [setTodo])
 
   return (
-    <div ref={inputAreaRef}>
-      {/* <pre>{JSON.stringify(todo.title)}</pre> */}
-      {/* <pre>{JSON.stringify(todo, null,'\t')}</pre> */}
+    <>
+      <CarInfo />
+      {/* <div ref={inputAreaRef}>
+
+      <pre>{JSON.stringify(todo.title)}</pre>
+      <pre>{JSON.stringify(todo, null,'\t')}</pre>
       <TextField 
         fullWidth 
         label="제목" 
@@ -91,11 +96,154 @@ const TodoForm = () => {
       <Button onClick={onSubmit} variant="contained" sx={{mt:3}} color={todo.hasOwnProperty('timestamp')? "secondary" : "primary" } >
         {todo.hasOwnProperty('timestamp') ? "할 일 업데이트" : "새 할 일 추가"}
       </Button>
-    </div>
+    </div> */}
+    </>
   )
 }
 
 export default TodoForm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //----------------------------------------------------
 

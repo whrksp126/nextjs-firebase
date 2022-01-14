@@ -32,7 +32,7 @@ export default function Home({todosProps}) {
  
     setOpen(false);
   };
-  console.log('currentUser',currentUser)
+  // console.log('currentUser',currentUser)
   return (
     <TodoContext.Provider value={{showAlert, todo, setTodo}}>
       <Container maxWidth="sm">
