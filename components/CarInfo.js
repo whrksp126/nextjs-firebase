@@ -17,90 +17,183 @@ import {SkipPreviousIcon,PlayArrowIcon,SkipNextIcon} from '@mui/icons-material';
 
 
 const CarInfo = () => {
-  const theme = useTheme();
-  const {currentUser} = useAuth();
+    const theme = useTheme();
+    const {
+      currentUser
+    } = useAuth();
 
 
-  // 차량 등록 기능 구현
-  const [addCar, setAddCar] = useState(false);
+    // 차량 등록 기능 구현
+    const [addCar, setAddCar] = useState(true);
 
-  const [open, setOpen] = useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-  
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    setCarNameError(false)
-    setCarNumberError(false)
-    if(carName === ''){setCarNameError(true)}
-    if(carNumber === ''){setCarNumberError(true)}
-    if(carName && carNumber){
-      try {
-        await setDoc(doc(db,'carManagement', carNumber), {
-          carName: carName,
-          carNumber: carNumber,
-          carImage: carImage,
-          userEmail: currentUser.email
-      });
-      setCarNumber('');
-      
-    } catch {
-      console.log('오류 발생')
+    const [open, setOpen] = useState(false);
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+    const handleClose = () => {
+      setOpen(false);
+    };
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setCarNameError(false)
+      setCarNumberError(false)
+      if (carName === '') {
+        setCarNameError(true)
+      }
+      if (carNumber === '') {
+        setCarNumberError(true)
+      }
+      if (carName && carNumber) {
+        try {
+          await setDoc(doc(db, 'carManagement', carNumber), {
+            carName: carName,
+            carNumber: carNumber,
+            carImage: carImage,
+            userEmail: currentUser.email
+          });
+          setCarNumber('');
+
+        } catch {
+          console.log('오류 발생')
+        }
+        setCarName('');
+        setCarNumber('');
+        setCarImage('');
+        setOpen(false);
+        location.reload()
+      } else {
+        console.log('모델 명과 차량 번호는 필수 사항 입니다.')
+      }
+      // console.log('carName은', carName, 'carNumber은', carNumber, 'carImage는', carImage)
     }
-    setCarName('');
-    setCarNumber('');
-    setCarImage('');
-    setOpen(false);
-    location.reload()
-  } else {
-    console.log('모델 명과 차량 번호는 필수 사항 입니다.')
-  }
-  // console.log('carName은', carName, 'carNumber은', carNumber, 'carImage는', carImage)
-}
-console.log(currentUser.email);
-  
-  const [carName, setCarName] = useState('');
-  const [carNumber, setCarNumber] = useState('');
-  const [carImage, setCarImage] = useState('');
-  const [carNameError, setCarNameError] = useState(false);
-  const [carNumberError, setCarNumberError] = useState(false);
-  
-  // 차량 정보 불러오기 기능 구현
-  
-  const [readData, setReadData] = useState([]);
-  const Data = async () => {
-    const q = query(collection(db, 'carManagement'));
-    const querySnapshot = await getDocs(q, 'snapshot');
-    const data = querySnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
-    setReadData(data)
-  };
-  useEffect(()=> {
-    Data();
-  }, []);
-  
+    console.log(currentUser.email);
+
+    const [carName, setCarName] = useState('');
+    const [carNumber, setCarNumber] = useState('');
+    const [carImage, setCarImage] = useState('');
+    const [carNameError, setCarNameError] = useState(false);
+    const [carNumberError, setCarNumberError] = useState(false);
+
+    // 차량 정보 불러오기 기능 구현
+
+    const [readData, setReadData] = useState([]);
+    const Data = async () => {
+      const q = query(collection(db, 'carManagement'));
+      const querySnapshot = await getDocs(q, 'snapshot');
+      const data = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setReadData(data)
+    };
+    useEffect(() => {
+      Data();
+    }, []);
+
+    useEffect(() => {
+
+      if (idData.id === undefined) {
+        console.log('데이터가 없습니다.')
+        setAddCar(false);
+      } else {
+        console.log('데이터가 있습니다.')
+        setAddCar(true);
+      }
 
 
-  useEffect(()=>{
-    
-    if(readData.length !== 0){      
-      console.log('데이터가 있습니다.')
-      setAddCar(true);
+    //   if (readData.length === 0) {
+    //     console.log('데이터가 없습니다.')
+    //     setAddCar(false);
+    //   } else {
+    //     console.log('데이터가 있습니다.')
+    //     setAddCar(true);
+    //   }
+    // if(idData.id === undefined){
+    //   console.log('idData.id === 0')
+    //   setAddCar(false)
+    // }
+    }, [readData])
+
+    // console.log('readData', readData)
+
+
+    // id 값에 맞는 데이터만 idData에 저장하기
+    let idData = {}
+    for (let i = 0; i < readData.length; i++) {
+      if (readData[i].userEmail === currentUser.email) {
+        idData = readData[i];
+      }
     }
-
-  }, [readData])
+    console.log('idData',idData)
 
 
   return (
-      addCar === false ? (
-        <>
-        <IconButton
+    addCar === true ? (
+      <>
+      <Card sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', zIndex:'tooltip', position: "absolute",}}>
+            <CardContent sx={{ flex: '1 0 auto' }}>
+              <Typography component="div" variant="h5">
+                {idData.carName}
+              </Typography>
+              <Typography variant="subtitle1" color="text.secondary" component="div">
+                {idData.carNumber}
+              </Typography>
+            </CardContent>
+          </Box>
+          <CardMedia
+            component="img"
+            // fullWidth
+            sx={{ 
+              marginTop: 2,
+              marginLeft: "40%",
+              zIndex:'modal',
+              width: 350 ,
+            }}
+            image={idData.carImage}
+            alt="차량 이미지"
+          />
+      {/* 데이터 베이스에 있는 모든 데이터를 불러오기 */}
+      {/* {readData.map((val, id) => {
+        // console.log(val.id)
+        // console.log(val.carName)
+        // console.log(val.carImage)
+        return (
+          <div key={id}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', zIndex:'tooltip', position: "absolute",}}>
+            <CardContent sx={{ flex: '1 0 auto' }}>
+              <Typography component="div" variant="h5">
+                {val.carName}
+              </Typography>
+              <Typography variant="subtitle1" color="text.secondary" component="div">
+                {val.carNumber}
+              </Typography>
+            </CardContent>
+          </Box>
+          <CardMedia
+            component="img"
+            // fullWidth
+            sx={{ 
+              marginTop: 2,
+              marginLeft: "40%",
+              zIndex:'modal',
+              width: 350 ,
+            }}
+            image={val.carImage}
+            alt="차량 이미지"
+          />
+          </div>
+        )
+        
+      })} */}
+      </Card>
+      </>
+      
+      ) : (
+
+      <>
+    <IconButton
           sx={{
             width: '100%',
             height: 220,
@@ -185,43 +278,6 @@ console.log(currentUser.email);
             </DialogActions>
           </form>
           </Dialog>
-        </>
-      ) : (
-      <>
-    <Card sx={{ display: 'flex' }}>
-      {readData.map((val, id) => {
-        console.log(val.id)
-        console.log(val.carName)
-        console.log(val.carImage)
-        return (
-          <div key={id}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', zIndex:'tooltip', position: "absolute",}}>
-            <CardContent sx={{ flex: '1 0 auto' }}>
-              <Typography component="div" variant="h5">
-                {val.carName}
-              </Typography>
-              <Typography variant="subtitle1" color="text.secondary" component="div">
-                {val.carNumber}
-              </Typography>
-            </CardContent>
-          </Box>
-          <CardMedia
-            component="img"
-            // fullWidth
-            sx={{ 
-              marginTop: 2,
-              marginLeft: "40%",
-              zIndex:'modal',
-              width: 350 ,
-            }}
-            image={val.carImage}
-            alt="차량 이미지"
-          />
-          </div>
-        )
-        
-      })}
-    </Card>
       </>
         // <>
         // <Box

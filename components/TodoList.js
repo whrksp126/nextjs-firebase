@@ -7,9 +7,11 @@ import Todo from "./Todo";
 const TodoList = ({todosProps}) => {
   const [todos, setTodos] = useState([]);
   const {currentUser} = useAuth();
+  
   useEffect(()=> {
       setTodos(JSON.parse(todosProps))
     },[])
+
   useEffect(()=>{
     const collectionRef = collection(db, 'todos');
     // 데이터 베이스에서 todos라는 콜렌션을 참조 하겠다.
@@ -25,12 +27,12 @@ const TodoList = ({todosProps}) => {
   }, [])
   return (
     <div>
-      {/* {todos.map(todo => <Todo key={todo.id} 
+      {todos.map(todo => <Todo key={todo.id} 
         id={todo.id}
         title={todo.title}
         detail={todo.detail}
         timestamp={todo.timestamp}
-      />)} */}
+      />)}
     </div>
   )
 }
