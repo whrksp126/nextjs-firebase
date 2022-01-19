@@ -101,18 +101,6 @@ const CarInfo = () => {
         setAddCar(true);
       }
 
-
-    //   if (readData.length === 0) {
-    //     console.log('데이터가 없습니다.')
-    //     setAddCar(false);
-    //   } else {
-    //     console.log('데이터가 있습니다.')
-    //     setAddCar(true);
-    //   }
-    // if(idData.id === undefined){
-    //   console.log('idData.id === 0')
-    //   setAddCar(false)
-    // }
     }, [readData])
 
     // console.log('readData', readData)

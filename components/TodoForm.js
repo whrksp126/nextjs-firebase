@@ -70,10 +70,10 @@ const TodoForm = () => {
   return (
     <>
       <CarInfo />
-      {/* <div ref={inputAreaRef}>
+      <div ref={inputAreaRef}>
 
-      <pre>{JSON.stringify(todo.title)}</pre>
-      <pre>{JSON.stringify(todo, null,'\t')}</pre>
+      {/* <pre>{JSON.stringify(todo.title)}</pre>
+      <pre>{JSON.stringify(todo, null,'\t')}</pre> */}
       <TextField 
         fullWidth 
         label="제목" 
@@ -96,7 +96,7 @@ const TodoForm = () => {
       <Button onClick={onSubmit} variant="contained" sx={{mt:3}} color={todo.hasOwnProperty('timestamp')? "secondary" : "primary" } >
         {todo.hasOwnProperty('timestamp') ? "할 일 업데이트" : "새 할 일 추가"}
       </Button>
-    </div> */}
+    </div>
     </>
   )
 }
