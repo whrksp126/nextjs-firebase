@@ -13,6 +13,7 @@ import { auth, db } from '../firebase';
 import { verifyIdToken } from '../firebaseAdmin';
 import nookies from 'nookies';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import Management from '../components/Management';
 
 export default function Home({todosProps}) {
   const {currentUser} = useAuth();
@@ -57,7 +58,8 @@ export default function Home({todosProps}) {
             {alertMessage}
           </Alert>
         </Snackbar>
-        <TodoList todosProps={todosProps}/>
+        {/* <TodoList todosProps={todosProps}/> */}
+        <Management />
       </Container>
     </TodoContext.Provider>
   )

@@ -69,11 +69,12 @@ const TodoForm = () => {
 
   return (
     <>
-      <CarInfo />
+      <CarInfo  />
+      
       <div ref={inputAreaRef}>
 
-      {/* <pre>{JSON.stringify(todo.title)}</pre>
-      <pre>{JSON.stringify(todo, null,'\t')}</pre> */}
+      <pre>{JSON.stringify(todo.title)}</pre>
+      <pre>{JSON.stringify(todo, null,'\t')}</pre>
       <TextField 
         fullWidth 
         label="제목" 
