@@ -7,6 +7,9 @@ import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
 
 import { useAuth } from '../Auth';
 
+import LocalizationProvider from '@mui/lab/Moment';
+
+
 const Management = () => {
 
   const {
@@ -106,6 +109,7 @@ const Management = () => {
   }
   console.log('idData',idData)
 
+  const [value, setValue] = useState(null);
 
   return   <><>
     <IconButton
@@ -130,32 +134,31 @@ const Management = () => {
         <p>신규 관리 내역 추가</p>
     </IconButton>
 
-    {/* 차량 정보 입력 */}
-    {/* <Dialog open={open} onClose={handleClose}>
+    차량 정보 입력
+    <Dialog open={open} onClose={handleClose}>
       <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-        <DialogTitle>차량 정보 입력</DialogTitle>
+        <DialogTitle>엔진 오일 관리 내역 등록</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            등록할 차량의 모델 명(이름)을 입력해 주세요.
-          </DialogContentText>
+
+        <LocalizationProvider dateAdapter={AdapterDateFns}>...</LocalizationProvider>
+
+
           <TextField
-            value={carName}
+            value={engineOilChangeDay}
             onChange={(e) => setCarName(e.target.value)}
             error={carNameError}
             required
             autoFocus
             margin="dense"
-            id="CarName"
-            label="모델 명"
+            id="engineOilChangeDay"
+            label="교체 날짜"
             type="string"
             fullWidth
             variant="standard" />
         </DialogContent>
 
         <DialogContent>
-          <DialogContentText>
-            등록할 차량의 번호를 입력해 주세요.
-          </DialogContentText>
+
           <TextField
             value={carNumber}
             onChange={(e) => setCarNumber(e.target.value)}
@@ -164,23 +167,21 @@ const Management = () => {
             autoFocus
             margin="dense"
             id="CarNum"
-            label="차량 번호"
+            label="교체 가격"
             type="string"
             fullWidth
             variant="standard" />
         </DialogContent>
 
         <DialogContent>
-          <DialogContentText>
-            등록할 차량의 사진(url)을 입력해 주세요.
-          </DialogContentText>
+
           <TextField
             value={carImage}
             onChange={(e) => setCarImage(e.target.value)}
             autoFocus
             margin="dense"
             id="CarNum"
-            label="차량 이미지"
+            label="상품 명"
             type="string"
             fullWidth
             variant="standard" />
@@ -191,7 +192,7 @@ const Management = () => {
           <Button type="submit">저장</Button>
         </DialogActions>
       </form>
-    </Dialog> */}
+    </Dialog>
   </>
     <div>
       <h1>관리 내용 추가</h1>
