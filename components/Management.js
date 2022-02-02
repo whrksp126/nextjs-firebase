@@ -7,8 +7,9 @@ import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
 
 import { useAuth } from '../Auth';
 
-import LocalizationProvider from '@mui/lab/Moment';
-
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
 
 const Management = () => {
 
@@ -140,8 +141,16 @@ const Management = () => {
         <DialogTitle>엔진 오일 관리 내역 등록</DialogTitle>
         <DialogContent>
 
-        <LocalizationProvider dateAdapter={AdapterDateFns}>...</LocalizationProvider>
-
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <DatePicker
+        label="Basic example"
+        value={value}
+        onChange={(newValue) => {
+          setValue(newValue);
+        }}
+        renderInput={(params) => <TextField {...params} />}
+      />
+    </LocalizationProvider>
 
           <TextField
             value={engineOilChangeDay}
